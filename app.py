@@ -25,16 +25,19 @@ def reload_data():
             Bank.data = json.loads(content)
 
 def show_data_table():
-    """Display all accounts in a styled table (PIN hidden for security)."""
+    """Display all accounts in a styled table with a show/hide PIN toggle."""
     reload_data()
     st.markdown("---")
-    st.subheader("📋 Live Database — All Accounts")
+    
+    col_title, col_toggle = st.columns([3, 1])
+    col_title.subheader("📋 Live Database — All Accounts")
+    show_pins = col_toggle.checkbox("👁️ Show PINs", key="toggle_live_table")
 
     if not Bank.data:
         st.info("No accounts found in the database.")
         return
 
-    # Build a display-safe version (hide PIN)
+    # Build a display version
     rows = []
     for i, acc in enumerate(Bank.data, start=1):
         rows.append({
@@ -44,7 +47,7 @@ def show_data_table():
             "Age"        : int(acc.get("age", 0)),
             "Email"      : str(acc.get("email", "—")),
             "Balance (₹)": int(acc.get("balance", 0)),
-            "PIN"        : "••••"          # never show real PIN
+            "PIN"        : str(acc.get("pin", "")) if show_pins else "••••"
         })
 
     df = pd.DataFrame(rows).set_index("#")
@@ -81,6 +84,7 @@ if "View All Accounts" in menu:
     if not Bank.data:
         st.info("No accounts in the database yet.")
     else:
+        show_pins = st.checkbox("👁️ Show PINs", key="toggle_all_accounts")
         rows = []
         for i, acc in enumerate(Bank.data, start=1):
             rows.append({
@@ -90,7 +94,7 @@ if "View All Accounts" in menu:
                 "Age"        : int(acc.get("age", 0)),
                 "Email"      : str(acc.get("email", "—")),
                 "Balance (₹)": int(acc.get("balance", 0)),
-                "PIN"        : "••••"
+                "PIN"        : str(acc.get("pin", "")) if show_pins else "••••"
             })
         df = pd.DataFrame(rows).set_index("#")
         st.dataframe(df, use_container_width=True)
