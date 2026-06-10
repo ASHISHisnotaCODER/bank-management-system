@@ -1,0 +1,13 @@
+================== B A N K _ S Y S T E M ==================
+
+BY : ASHISH KUMAR
+
+
+1.> Making a project using every basic concept learned yet (30/05/2026 - 01:08 pm)
+
+2.> " JSON "  file saves/store the previously entered users data , even after we re run 
+the program after the deletion of terminal , or even after system shut down !
+
+3.> use "streamlit run app.py" in terminal to run the "app.py" app
+
+4.> you can see the updated data in "data.json" file 
